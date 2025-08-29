@@ -4,7 +4,7 @@
 
 In a sea of millions of security events, one workstation literally stood out, floating high above all the others when I transformed flat logs into a 3D visualization. I wasn't hunting for it. I didn't filter for it. It emerged naturally.
 
-This repository contains the complete SPL implementation that revealed Amber's compromised workstation as a behavioral outlier in the Splunk BOTS v2 dataset - as featured in THOR Collective Dispatch [Date].
+This repository contains the complete SPL implementation that identified Amber's compromised workstation as a behavioral outlier in the Splunk BOTS v2 dataset, as featured in THOR Collective Dispatch [Date].
 
 ### The Core Finding
 Every SOC faces the same paradox: drowning in millions of events while blind to the patterns within them. This implementation proves that unusual behavior patterns **can't hide in 3D space** when you measure diversity across Time, Terrain, and Behavior dimensions.
@@ -97,7 +97,7 @@ THOR Collective Dispatch, [Date]. GitHub: github.com/TacticalDetect/TTB_BOTS_v2
 ## Author
 
 **Certis Foster**
-- Featured in: THOR Collective
+- Featured in: THOR Collective Dispatch
 - LinkedIn: https://www.linkedin.com/in/certisf/
 - Substack: https://tacticaldetect.substack.com/
 
@@ -109,7 +109,7 @@ MIT License - Use freely, attribute appropriately.
 
 - MITRE for TTB framework theory
 - Splunk for BOTS v2 dataset  
-- THOR Collective for publication platform
+- THOR Collective Dispatch for publication platform
 
 ---
 
