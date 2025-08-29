@@ -1,4 +1,7 @@
 # TTB_BOTS_v2: Can't Hide in 3D
+<p align="center">
+  <img src="https://github.com/TacticalDetect/TTB_BOTS_v2/blob/main/spl_query/ttb.gif" alt="TTB 3D Visualization" width="600">
+</p>
 
 ## Practical Implementation of Time-Terrain-Behavior Framework
 
