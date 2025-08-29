@@ -1,0 +1,101 @@
+index=botsv2 earliest="08/1/2017:00:00:00" latest="08/30/2017:00:00:00" 
+    
+```Time Dimension - Universal Business Context```
+| eval date_wday=strftime(_time,"%a") 
+| eval date_wday=case(date_wday=="Mon",1,date_wday=="Tue",2,date_wday=="Wed",3,date_wday=="Thu",4,date_wday=="Fri",5,date_wday=="Sat",6,date_wday=="Sun",7)
+
+```Create 15 distinct business cycle contexts``` 
+| eval seasonality_class = case(
+    date_wday>=1 AND date_wday<=5 AND date_hour>=0 AND date_hour<4, "weekday_late_night_after_hours",
+    date_wday>=1 AND date_wday<=5 AND date_hour>=4 AND date_hour<6, "weekday_early_morning_after_hours",
+    date_wday>=1 AND date_wday<=5 AND date_hour>=6 AND date_hour<8, "weekday_early_morning_pre_business",
+    date_wday>=1 AND date_wday<=5 AND date_hour>=8 AND date_hour<9, "weekday_morning_pre_business",
+    date_wday>=1 AND date_wday<=5 AND date_hour>=9 AND date_hour<12, "weekday_morning_core_business",
+    date_wday>=1 AND date_wday<=5 AND date_hour>=12 AND date_hour<16, "weekday_afternoon_core_business",
+    date_wday>=1 AND date_wday<=5 AND date_hour>=16 AND date_hour<17, "weekday_evening_core_business",
+    date_wday>=1 AND date_wday<=5 AND date_hour>=17 AND date_hour<20, "weekday_evening_extended_business",
+    date_wday>=1 AND date_wday<=5 AND date_hour>=20, "weekday_night_after_hours",
+    (date_wday=7 OR date_wday=6) AND date_hour>=0 AND date_hour<4, "weekend_late_night",
+    (date_wday=7 OR date_wday=6) AND date_hour>=4 AND date_hour<8, "weekend_early_morning",
+    (date_wday=7 OR date_wday=6) AND date_hour>=8 AND date_hour<12, "weekend_morning",
+    (date_wday=7 OR date_wday=6) AND date_hour>=12 AND date_hour<16, "weekend_afternoon",
+    (date_wday=7 OR date_wday=6) AND date_hour>=16 AND date_hour<20, "weekend_evening",
+    (date_wday=7 OR date_wday=6) AND date_hour>=20, "weekend_night")
+    
+```Terrain Categories Types```
+| eval Terrain_Category = case(
+    match(sourcetype, "(?i)wineventlog"), "Windows_Event_Logs",
+    match(sourcetype, "(?i)winregistry"), "Windows_Registry",
+    match(sourcetype, "(?i)sysmon"), "Windows_Sysmon",
+    match(sourcetype, "(?i)XmlWinEventLog"), "Windows_XML_Events",
+    match(sourcetype, "(?i)winhostmon"), "Windows_Host_Monitor",
+    match(sourcetype, "^stream:http"), "HTTP_Traffic",
+    match(sourcetype, "^stream:dns"), "DNS_Traffic",
+    match(sourcetype, "^stream:ftp"), "FTP_Traffic",
+    match(sourcetype, "^stream:tcp"), "TCP_Traffic",
+    match(sourcetype, "^stream:udp"), "UDP_Traffic",
+    match(sourcetype, "(?i)pan:traffic"), "PaloAlto_Traffic",
+    match(sourcetype, "(?i)pan:threat"), "PaloAlto_Threats",
+    match(sourcetype, "(?i)pan:system"), "PaloAlto_System",
+    match(sourcetype, "(?i)suricata"), "Suricata_IDS",
+    match(sourcetype, "(?i)symantec"), "Symantec_EPM",
+    match(sourcetype, "(?i)mysql"), "MySQL_Database",
+    match(sourcetype, "(?i)db"), "Database_General",
+    match(sourcetype, "(?i)o365"), "Office365",
+    match(sourcetype, "(?i)msad"), "ActiveDirectory",
+    match(sourcetype, "(?i)ldap"), "LDAP_Directory",
+    match(sourcetype, "(?i)osquery"), "OSQuery")
+    
+``` Classify Behavioral Patterns ```
+| eval Behavior_Category = if(isnotnull(signature) AND match(sourcetype, "(?i)suricata|pan:threat"), signature, 
+    case(
+        match(action, "(?i)login|logon|authenticate"), "Authentication",
+        match(action, "(?i)logout|logoff"), "Deauthentication",
+        match(action, "(?i)create|add"), "Creation",
+        match(action, "(?i)delete|remove"), "Deletion",
+        match(action, "(?i)modify|update|change"), "Modification",
+        match(action, "(?i)read|get|list|search|query"), "Information_Access",
+        match(action, "(?i)start|execute|run"), "Execution",
+        match(action, "(?i)stop|kill|terminate"), "Termination",
+        match(action, "(?i)allow|permit|accept"), "Allow",
+        match(action, "(?i)deny|block|reject|failure"), "Deny",
+        match(action, "(?i)connect|disconnect"), "Connection",
+        match(action, "(?i)install|uninstall"), "Installation"))
+        
+```Map Host & IP Aliases To Workstations``` 
+| eval ClientDevice = case(
+    match(host, "(?i)MACLORY-AIR13") OR match(src_ip, "10\.0\.4\.2") OR match(dest_ip, "10\.0\.4\.2") OR match(src_ip, "10\.0\.4\.4") OR match(dest_ip, "10\.0\.4\.4"), "Mallory_MacBook",
+    match(host, "(?i)kutekitten"), "Mallory_Personal",
+    match(host, "(?i)wrk-klagerf") OR match(src_ip, "10\.0\.2\.109") OR match(dest_ip, "10\.0\.2\.109"), "Klagerf_Workstation",
+    match(host, "(?i)wrk-aturing") OR match(src_ip, "10\.0\.2\.101") OR match(dest_ip, "10\.0\.2\.101"), "Amber_Workstation",
+    match(host, "(?i)wrk-ghoppy") OR match(src_ip, "10\.0\.2\.103") OR match(dest_ip, "10\.0\.2\.103"), "Grace_Workstation",
+    match(host, "(?i)wrk-abungst") OR match(src_ip, "10\.0\.2\.108") OR match(dest_ip, "10\.0\.2\.108"), "Bungstein_Workstation",
+    match(host, "(?i)wrk-fmaltes") OR match(src_ip, "10\.0\.2\.105") OR match(dest_ip, "10\.0\.2\.105"), "Maltes_Workstation",
+    match(host, "(?i)wrk-btun") OR match(src_ip, "10\.0\.2\.107") OR match(dest_ip, "10\.0\.2\.107"), "Billy_Workstation",
+    match(host, "(?i)wrk-bgist") OR match(src_ip, "10\.0\.2\.110") OR match(dest_ip, "10\.0\.2\.110"), "Bruce_Workstation")
+    
+| eval clusterColor = case(
+    ClientDevice == "Mallory_MacBook", "#FF5733",
+    ClientDevice == "Mallory_Personal", "#FF8C33",
+    ClientDevice == "Grace_Workstation", "#33A8FF",
+    ClientDevice == "Bungstein_Workstation", "#33FF57",
+    ClientDevice == "Billy_Workstation", "#8C33FF",
+    ClientDevice == "Bruce_Workstation", "#FFDD33",
+    ClientDevice == "Klagerf_Workstation", "#FF33A8",
+    ClientDevice == "Amber_Workstation", "#33FFC8",
+    ClientDevice == "Maltes_Workstation", "#C8FF33")
+    
+|  rename ClientDevice AS clusterId
+
+| stats 
+   ```Count of distinct time contexts when active```
+   dc(seasonality_class) AS y,
+   ```Count of distinct security tools observing this workstation```
+   dc(Terrain_Category) AS x,
+   ```Behavior diversity - how many different action types observed```
+   dc(Behavior_Category) AS z,
+   ```Preserve color assignment for visualization```
+   values(clusterColor) AS clusterColor
+by clusterId
+
+| fields clusterId x y z clusterColor
