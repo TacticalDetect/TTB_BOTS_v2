@@ -7,7 +7,7 @@
 
 In a sea of millions of security events, one workstation literally stood out, floating high above all the others when I transformed flat logs into a 3D visualization. I wasn't hunting for it. I didn't filter for it. It emerged naturally.
 
-This repository contains the complete SPL implementation that identified Amber's compromised workstation as a behavioral outlier in the Splunk BOTS v2 dataset, as featured in THOR Collective Dispatch [Date].
+This repository contains the complete SPL implementation that identified Amber's workstation as a behavioral outlier in the Splunk BOTS v2 dataset, as featured in THOR Collective Dispatch [Date].
 
 ### The Core Finding
 Every SOC faces the same paradox: drowning in millions of events while blind to the patterns within them. This implementation proves that unusual behavior patterns **can't hide in 3D space** when you measure diversity across Time, Terrain, and Behavior dimensions.
