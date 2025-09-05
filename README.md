@@ -92,7 +92,7 @@ MITRE Categories → Numerical Metrics → 3D Space
 
 ```
 Certis Foster, "Can't Hide in 3D: Practical Implementation of TTB Framework", 
-THOR Collective Dispatch "Cant Hide In 3D", 9/4/25. GitHub: github.com/TacticalDetect/TTB_BOTS_v2
+THOR Collective Dispatch, 9/4/25. GitHub: github.com/TacticalDetect/TTB_BOTS_v2
 ```
 
 ## Author
