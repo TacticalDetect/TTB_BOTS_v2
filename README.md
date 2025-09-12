@@ -7,7 +7,7 @@
 
 In a sea of millions of security events, one workstation literally stood out, floating high above all the others when I transformed flat logs into a 3D visualization. I wasn't hunting for it. I didn't filter for it. It emerged naturally.
 
-This repository contains the complete SPL implementation that identified Amber's workstation as a behavioral outlier in the Splunk BOTS v2 dataset, as featured in [THOR Collective Dispatch](https://dispatch.thorcollective.com/p/cant-hide-in-3d).
+This repository contains the complete SPL implementation that identified Amber's workstation as a behavioral outlier in the Splunk BOTS v2 dataset, as featured in [THOR Collective Dispatch](https://dispatch.thorcollective.com/p/cant-hide-in-3d), and recognized in Detection Engineering Weekly's "[State of the Art](https://www.detectionengineering.net/i/173006335/state-of-the-art)" section (Issue #128).
 
 ### The Core Finding
 Every SOC faces the same paradox: drowning in millions of events while blind to the patterns within them. This implementation proves that unusual behavior patterns **can't hide in 3D space** when you measure diversity across Time, Terrain, and Behavior dimensions.
@@ -99,6 +99,7 @@ THOR Collective Dispatch, 9/4/25. GitHub: github.com/TacticalDetect/TTB_BOTS_v2
 
 **Certis Foster**
 - Featured in: [THOR Collective Dispatch](https://dispatch.thorcollective.com/p/cant-hide-in-3d)
+- Featured in: Detection Engineering Weekly's "[State of the Art](https://www.detectionengineering.net/i/173006335/state-of-the-art)" section (Issue #128).
 - LinkedIn: https://www.linkedin.com/in/certisf/
 - Substack: https://tacticaldetect.substack.com/
 
